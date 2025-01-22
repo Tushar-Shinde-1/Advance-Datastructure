@@ -1,0 +1,100 @@
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+    int data;
+    node *next;
+};
+node *newnode, *temp, *previ, *head = NULL, *next = NULL;
+
+void insert()
+{
+    newnode = new node;
+    int random;
+    cout << "enter the input data :";
+    cin >> random;
+    newnode->data = random;
+    if (head == NULL)
+    {
+        head = temp = newnode;
+    }
+    else
+    {
+        temp->next = newnode;
+        temp = newnode;
+        newnode->next = NULL;
+    }
+}
+void display()
+{
+    temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->data << "\t";
+        temp = temp->next;
+    }
+}
+void insertAtFirst()
+{
+    newnode = new node;
+    int random;
+    cout << "enter the input data :";
+    cin >> random;
+    newnode->data = random;
+    temp = head;
+    head = newnode;
+    head->next = temp;
+}
+void deletenode(int value)
+{ if(head->data==value)
+{previ=head;
+head=previ->next;
+delete previ;
+
+}
+else{
+    temp=head;
+    while(temp!=NULL)
+    { if(temp->data== value)
+    {
+        previ->next=temp->next;
+        delete temp;
+        break;
+
+    }   
+            previ=temp;
+            temp=temp->next;
+            
+    }
+}
+}
+
+
+int main()
+{ int ch;
+int n,value;
+do{
+    cout<<"what operation you want to perform\n1.insert \n2.delete\n3.display\n4.exit"<<endl;
+    cin>>ch;
+    switch(ch)
+    { case 1:
+    cout << "how many no you wanna insert :";
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        insert();
+    }
+    break;
+    case 2:
+    cout<<"what value you want to delete ";
+    cin>>value;
+    deletenode(value);
+    break;
+    case 3:
+    cout << "\n the elements are" << endl;
+    display();
+    break;
+    }
+}while(ch!=4);
+}
