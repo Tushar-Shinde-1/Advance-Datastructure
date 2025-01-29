@@ -5,16 +5,21 @@ class node
 public:
     int data;
     node *next;
+
+    node(int a )
+    {   data=a;
+        next=NULL;
+    }
 };
 node *newnode, *temp, *previ, *head = NULL, *next = NULL;
 
 void insert()
 {
-    newnode = new node;
+   
     int random;
     cout << "enter the input data :";
     cin >> random;
-    newnode->data = random;
+     newnode = new node(random);
     if (head == NULL)
     {
         head = temp = newnode;
@@ -37,14 +42,28 @@ void display()
 }
 void insertAtFirst()
 {
-    newnode = new node;
-    int random;
+     int random;
     cout << "enter the input data :";
     cin >> random;
-    newnode->data = random;
+     newnode = new node(random);
     temp = head;
     head = newnode;
     head->next = temp;
+}
+void insertAtLast()
+{   
+    int random;
+    cout << "enter the input data :";
+    cin >> random;
+     newnode = new node(random);
+    temp=head;
+    while(temp->next!=NULL)
+    {
+        temp=temp->next;
+
+    }
+    temp->next=newnode;
+    
 }
 void deletenode(int value)
 { if(head->data==value)
@@ -68,6 +87,7 @@ else{
             
     }
 }
+cout<<"element deleted successfuly!"<<endl;
 }
 
 
@@ -75,7 +95,7 @@ int main()
 { int ch;
 int n,value;
 do{
-    cout<<"what operation you want to perform\n1.insert \n2.delete\n3.display\n4.exit"<<endl;
+    cout<<"\nwhat operation you want to perform\n1.insert \n2.delete\n3.display\n4.insert at first\n5.insert at last\n4.exit"<<endl;
     cin>>ch;
     switch(ch)
     { case 1:
@@ -95,6 +115,12 @@ do{
     cout << "\n the elements are" << endl;
     display();
     break;
+    case 4:
+    insertAtFirst();
+    break;
+    case 5:
+    insertAtLast();
+    break;
     }
-}while(ch!=4);
+}while(ch!=6);
 }
