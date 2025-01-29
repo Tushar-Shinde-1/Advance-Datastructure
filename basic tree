@@ -1,0 +1,26 @@
+void insert(Node *root1,Node *temp1)
+{
+cout<<"enter the field(l/r) for insertion";
+	cin>>field;
+		if(field=='l')
+		{
+			if('l'==NULL)
+			{ 
+			root->left=temp;
+			}
+			else
+			{
+			insertnode(root->left,temp);
+			}
+		}
+		else{
+			if('r'==NULL)
+			{ 
+			root->right=temp;
+			}
+			else
+			{
+			insertnode(root->right,temp);
+			}
+			
+		}}	
