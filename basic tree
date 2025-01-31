@@ -1,26 +1,97 @@
-void insert(Node *root1,Node *temp1)
+#include <iostream>
+using namespace std;
+class node
 {
-cout<<"enter the field(l/r) for insertion";
-	cin>>field;
-		if(field=='l')
-		{
-			if('l'==NULL)
-			{ 
-			root->left=temp;
-			}
-			else
-			{
-			insertnode(root->left,temp);
-			}
-		}
-		else{
-			if('r'==NULL)
-			{ 
-			root->right=temp;
-			}
-			else
-			{
-			insertnode(root->right,temp);
-			}
-			
-		}}	
+public:
+    int data;
+    node *right;
+    node *left;
+    node(int x)
+    {
+        data = x;
+        right = NULL;
+        left = NULL;
+    }
+} *newnode, *head = NULL;
+
+void insert(node *root, node *tem)
+{
+    cout << "where do you want to insert<l/r>";
+    char ch;
+    cin >> ch;
+    if (ch == 'l')
+    {
+        if (root->left == NULL)
+        {
+            root->left = tem;
+            cout << "data inserted at left" << endl;
+        }
+        else
+        {
+            insert(root->left, tem);
+        }
+    }
+    else
+    {
+        if (root->right == NULL)
+        {
+            root->right = tem;
+            cout << "data inserted at right" << endl;
+        }
+        else
+        {
+            insert(root->right, tem);
+        }
+    }
+}
+
+void printtree(node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    cout << root->data<<"\t";
+    printtree(root->left);
+    printtree(root->right);
+}
+
+void insertroot()
+{
+    cout << "enter the data for insertion :";
+    int value;
+    cin >> value;
+    newnode = new node(value);
+
+    if (head == NULL)
+    {
+        head = newnode;
+    }
+    else
+    {
+        insert(head, newnode);
+    }
+}
+
+int main()
+{
+    int ch;
+    do
+    {
+        cout << "\nwhat do you want to perform\n1.insertion\n2.display\n3.end";
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+            insertroot();
+            break;
+        case 2:
+            printtree(head);
+            break;
+        
+        default:
+            cout << "invalid choice"<<endl;
+            cout<<"please enter valid choice"<<endl;
+        }
+    } while (ch != 3);
+}
