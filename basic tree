@@ -1,97 +1,239 @@
-#include <iostream>
+#include<iostream>
+#include<stack>
+
 using namespace std;
-class node
-{
-public:
-    int data;
-    node *right;
-    node *left;
-    node(int x)
-    {
-        data = x;
-        right = NULL;
-        left = NULL;
-    }
-} *newnode, *head = NULL;
 
-void insert(node *root, node *tem)
+class Node
 {
-    cout << "where do you want to insert<l/r>";
-    char ch;
-    cin >> ch;
-    if (ch == 'l')
-    {
-        if (root->left == NULL)
-        {
-            root->left = tem;
-            cout << "data inserted at left" << endl;
-        }
-        else
-        {
-            insert(root->left, tem);
-        }
-    }
-    else
-    {
-        if (root->right == NULL)
-        {
-            root->right = tem;
-            cout << "data inserted at right" << endl;
-        }
-        else
-        {
-            insert(root->right, tem);
-        }
-    }
-}
+	public:
+	int data;
+	Node* left;
+	Node* right;
+	int count;
+	Node(int x)
+	{count=0;
+	data=x;
+	left=NULL;
+	right=NULL;
+	}
+}*root=NULL,*current,*temp,*newnode;
 
-void printtree(node *root)
+void insert(Node *root1,Node *temp1)
+{char field;
+cout<<"enter the field(l/r) for insertion";
+	cin>>field;
+		if(field=='l')
+		{
+			if(root1->left==NULL)
+			{ 
+			root1->left=temp;
+			}
+			else
+			{
+			insert(root1->left,temp);
+			}
+		}
+		else{
+			if(root1->right==NULL)
+			{ 
+			root1->right=temp;
+			}
+			else
+			{
+			insert(root1->right,temp);
+			}
+			
+		}}	
+ void insertroot()
+{	int value;
+	char field;
+	cout<<"enter the data for insertion:";
+	cin>>value;
+	temp=new Node(value);
+	if(root==NULL)
+		{
+		 root=temp;
+		 }
+	else
+	{	insert(root,temp);
+	
+		}
+		}
+		
+
+void displaypreorder(Node *ro)
 {
-    if (root == NULL)
-    {
-        return;
-    }
-    cout << root->data<<"\t";
-    printtree(root->left);
-    printtree(root->right);
-}
-
-void insertroot()
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	cout<<ro->data<<"\t";
+	displaypreorder(ro->left);
+	displaypreorder(ro->right);
+	}
+	
+	}
+	
+void displayinorder(Node *ro)
 {
-    cout << "enter the data for insertion :";
-    int value;
-    cin >> value;
-    newnode = new node(value);
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	displayinorder(ro->left);
+	cout<<ro->data<<"\t";
+	displayinorder(ro->right);
+	}
+	
+	}
 
-    if (head == NULL)
-    {
-        head = newnode;
-    }
-    else
-    {
-        insert(head, newnode);
-    }
-}
+void displaypostorder(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	displaypostorder(ro->left);
+	displaypostorder(ro->right);
+	cout<<ro->data<<"\t";
+	}
+	
+	}
+		
+//void totalNodeDisplay(Node *ro,int)
+///{//	
+	//if(ro==NULL)
+//	{
+	//return ;
+	//}
+	//else
+	//{
+	
+	//totalNodeDisplay(ro->left,count);
+	//totalNodeDisplay(ro->right,count);
+	//count=count+=1;
+	
+	//cout<<ro->data<<"\t";
+	
+	//}
+	//cout<<count;
+//
+	//}
+	
+void leafDisplay(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	leafDisplay(ro->left);
+	leafDisplay(ro->right);
+	if(ro->left==NULL&&ro->right==NULL)
+	{
+	cout<<ro->data<<"\t";
+	}
+	}
+	
+	
+	
+	
+	}
+	int displayTotalNode(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return 0;
+	}
+	
+	
+	return 1+displayTotalNode(ro->left)+ displayTotalNode(ro->right);
+	
+	
+	
+	}
+	void preorderwithoutrecursion(Node *root)
+	{
+	Node *current;
+	stack<Node *>s;
+	s.push(root);
+	while(!s.empty())
+	{
+	current=s.top();
+	s.pop();
+	 cout<<current->data<<" ";
+	 if(current->right!=nullptr)
+	 {
+	 s.push(current->right);
+	 }
+	 
+	 if(current->left!=nullptr)
+	 {
+	  s.push(current->left);
+	 }
+	
+	
+	}
+	}
+	int heightOfTree(Node*root)
+	{if(root==nullptr)
+	{
+	return-1;}
+	int left=heightOfTree(root->left);
+	int right=heightOfTree(root->right);
+	return max(left,right)+1;
+	
+	}
+	
 
 int main()
 {
-    int ch;
-    do
-    {
-        cout << "\nwhat do you want to perform\n1.insertion\n2.display\n3.end";
-        cin >> ch;
-        switch (ch)
-        {
-        case 1:
-            insertroot();
-            break;
-        case 2:
-            printtree(head);
-            break;
-        
-        default:
-            cout << "invalid choice"<<endl;
-            cout<<"please enter valid choice"<<endl;
-        }
-    } while (ch != 3);
-}
+int ch,calc=0;
+	do
+	{
+	cout<<"\n\nwhat do you want to perform\n1.insert\n2.display preorder\n3.display inorder \n4.display postorder\n5.total nodes \n6.leaf node display\n7.display preorder without recursion\n8.height of tree\n9.exit\n";
+	cin>>ch;
+		switch(ch)
+			{
+			case 1 :
+			
+			insertroot();
+			break;
+			case 2:
+			displaypreorder(root);
+			break;
+			case 3:
+			displayinorder(root);
+			break;
+			case 4:
+			displaypostorder(root);
+			break;
+			case 5:
+			cout<<displayTotalNode(root);
+			break;
+			case 6:
+			leafDisplay(root);
+			break;
+			case 7:
+			preorderwithoutrecursion(root);
+			break;
+			case 8:
+			cout<<heightOfTree(root);
+			}}
+			while(ch!=9);
+			
+			return 0;
+			}
+			
+
+
