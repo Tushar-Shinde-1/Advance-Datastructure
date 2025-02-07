@@ -1,0 +1,309 @@
+#include<iostream>
+#include<stack>
+
+using namespace std;
+
+class Node
+{
+	public:
+	int age;
+	string name;
+	Node* left;
+	Node* right;
+	int count;
+	Node(int x,string name1)
+	{
+	age=x;
+	name=name1;
+	left=NULL;
+	right=NULL;
+	}
+}*root=NULL,*current,*temp,*newnode;
+
+void insert(Node *root1,Node *temp1)
+{char field;
+cout<<"enter the field(l/r) for insertion";
+	cin>>field;
+		if(field=='l')
+		{
+			if(root1->left==NULL)
+			{ 
+			root1->left=temp;
+			}
+			else
+			{
+			insert(root1->left,temp);
+			}
+		}
+		else{
+			if(root1->right==NULL)
+			{ 
+			root1->right=temp;
+			}
+			else
+			{
+			insert(root1->right,temp);
+			}
+			
+		}}	
+ void insertroot()
+{	int value;
+	char field;
+	string name;
+	cout<<"Enter the age for member:";
+	cin>>value;
+	cout<<"Enter the name of member:";
+	cin>>name;
+	temp=new Node(value,name);
+	if(root==NULL)
+		{
+		 root=temp;
+		 }
+	else
+	{	insert(root,temp);
+	
+		}
+		}
+		
+
+void displaypreorder(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	cout<<"name :"<<ro->name<<"\n";
+	cout<<"age  :"<<ro->age<<endl;
+	displaypreorder(ro->left);
+	displaypreorder(ro->right);
+	}
+	
+	}
+	
+void displayinorder(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	displayinorder(ro->left);
+	cout<<"name :"<<ro->name<<"\n";
+	cout<<"age  :"<<ro->age<<endl;
+	displayinorder(ro->right);
+	}
+	
+	}
+
+void displaypostorder(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	displaypostorder(ro->left);
+	displaypostorder(ro->right);
+	cout<<"name :"<<ro->name<<"\n";
+	cout<<"age  :"<<ro->age<<endl;
+	}
+	
+	}
+		
+//void totalNodeDisplay(Node *ro,int)
+///{//	
+	//if(ro==NULL)
+//	{
+	//return ;
+	//}
+	//else
+	//{
+	
+	//totalNodeDisplay(ro->left,count);
+	//totalNodeDisplay(ro->right,count);
+	//count=count+=1;
+	
+	//cout<<ro->data<<"\t";
+	
+	//}
+	//cout<<count;
+//
+	//}
+	
+void leafDisplay(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return;
+	}
+	else
+	{
+	
+	leafDisplay(ro->left);
+	leafDisplay(ro->right);
+	if(ro->left==NULL&&ro->right==NULL)
+	{
+	cout<<"name :"<<ro->name<<"\n";
+	cout<<"age  :"<<ro->age<<endl;
+	}
+	}
+	
+	
+	
+	
+	}
+	int displayTotalNode(Node *ro)
+{
+	if(ro==NULL)
+	{
+	return 0;
+	}
+	
+	
+	return 1+displayTotalNode(ro->left)+ displayTotalNode(ro->right);
+	
+	
+	
+	}
+	void preorderwithoutrecursion(Node *root)
+	{
+	Node *current;
+	stack<Node *>s;
+	s.push(root);
+	while(!s.empty())
+	{
+	current=s.top();
+	s.pop();
+	cout<<"name :"<<root->name<<"\n";
+	cout<<"age  :"<<root->age<<endl;
+	 if(current->right!=nullptr)
+	 {
+	 s.push(current->right);
+	 }
+	 
+	 if(current->left!=nullptr)
+	 {
+	  s.push(current->left);
+	 }
+	
+	
+	}
+	}
+	int heightOfTree(Node*root)
+	{if(root==nullptr)
+	{
+	return -1;}
+	int left=heightOfTree(root->left);
+	int right=heightOfTree(root->right);
+	return max(left,right)+1;
+	
+	}
+	
+	void ancestors(Node*root)
+	{
+         
+	}
+	
+void search(Node *root,string &name)
+	{
+	if(root==nullptr)
+	{
+	return;
+	}
+	
+	if(root->name==name)
+	{
+	cout<<"the member is Present in Family"<<endl;
+	//return;
+	}
+	else{
+	search(root->left,name);
+	search(root->right,name);
+	}
+	}
+	
+void update(Node *root,string &member)
+{
+	if(root==nullptr)
+	{
+	return;
+	}
+	if(root->name==member)
+	{
+	cout<<"enter the age to update";
+	int nage;
+	cin>>nage;
+	cout<<"enter the the name to update";
+	string name;
+	cin>>name;
+	root->age=nage;
+	root->name=name;
+	
+	}
+	else
+	{
+	update(root->left,member);
+	update(root->right,member);
+	
+	
+	}
+}
+void siblings(Node *root,string &parent)
+{
+	if(root==nullptr)
+	{
+	return;)
+	}
+	
+int main()
+{
+int ch,calc=0;
+string member;
+	do
+	{
+	cout<<"\n\nwhat do you want to perform\n1.insert\n2.display preorder\n3.Search the member\n4.update member info\n5.total nodes \n6.leaf node display\n7.display preorder without recursion\n8.height of tree\n9.exit\n";
+	cin>>ch;
+		switch(ch)
+			{
+			case 1 :
+			
+			insertroot();
+			break;
+			case 2:
+			displaypreorder(root);
+			break;
+			case 3:
+			cout<<"Enter the name for search";
+			cin>>member;			
+			search(root,member);
+			break;
+			case 4:
+			cout<<"Enter the name for update";
+			cin>>member;
+			update(root,member);	
+			break;
+			case 5:
+			cout<<displayTotalNode(root);
+			break;
+			case 6:
+			leafDisplay(root);
+			break;
+			case 7:
+			preorderwithoutrecursion(root);
+			break;
+			case 8:
+			cout<<heightOfTree(root);
+			}}
+			while(ch!=9);
+			
+			return 0;
+			}
+			
+
+
