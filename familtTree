@@ -8,157 +8,74 @@ class Node
 public:
     int age;
     string name;
-    Node *left;
-    Node *right;
-    int count;
+    Node *left, *right;
     Node(int x, string name1)
     {
         age = x;
         name = name1;
-        left = NULL;
-        right = NULL;
+        left = right = NULL;
     }
-} *root = NULL, *current, *temp, *newnode;
+} *root = NULL;
 
 void insert(Node *root1, Node *temp1)
 {
     char field;
-    cout << "enter the field(l/r) for insertion";
+    cout << "Enter the field (l/r) for insertion: ";
     cin >> field;
     if (field == 'l')
     {
-        if (root1->left == NULL)
-        {
-            root1->left = temp;
-        }
+        if (!root1->left)//root-<left==null
+            root1->left = temp1;
         else
-        {
-            insert(root1->left, temp);
-        }
+            insert(root1->left, temp1);
     }
     else if (field == 'r')
     {
-        if (root1->right == NULL)
-        {
-            root1->right = temp;
-        }
+        if (!root1->right)//root->right==null
+            root1->right = temp1;
         else
-        {
-            insert(root1->right, temp);
-        }
+            insert(root1->right, temp1);
     }
     else
     {
-        cout << "Invalid choice! Please enter 'l' or 'r'.\n"; // Added validation for incorrect input
+        cout << "Invalid choice! Please enter 'l' or 'r'.\n";
     }
 }
+
 void insertroot()
 {
     int value;
-    char field;
     string name;
-    cout << "Enter the age for member:";
+    cout << "Enter the age of the member: ";
     cin >> value;
-    cout << "Enter the name of member:";
+    cout << "Enter the name of the member: ";
     cin >> name;
-    temp = new Node(value, name);
-    if (root == NULL)
-    {
+    Node *temp = new Node(value, name);
+    if (!root)//root==null
         root = temp;
-    }
     else
-    {
         insert(root, temp);
-    }
 }
 
 void displaypreorder(Node *ro)
 {
-    if (ro == NULL)
-    {
+    if (!ro)
         return;
-    }
-    else
-    {
-        cout << "name :" << ro->name << "\n";
-        cout << "age  :" << ro->age << endl;
-        displaypreorder(ro->left);
-        displaypreorder(ro->right);
-    }
+    cout << "Name: " << ro->name << "\nAge: " << ro->age << "\n";
+    displaypreorder(ro->left);
+    displaypreorder(ro->right);
 }
 
-// void displayinorder(Node *ro)
+// void leafDisplay(Node *ro)
 // {
-// 	if(ro==NULL)
-// 	{
-// 	return;
-// 	}
-// 	else
-// 	{
+//     if (!ro)
+//         return;
+//     leafDisplay(ro->left);
+//     leafDisplay(ro->right);
+//     if (ro->left && ro->right)
+//         cout << "Name: " << ro->name << "\nAge: " << ro->age << "\n";
+// }
 
-// 	displayinorder(ro->left);
-// 	cout<<"name :"<<ro->name<<"\n";
-// 	cout<<"age  :"<<ro->age<<endl;
-// 	displayinorder(ro->right);
-// 	}
-
-// 	}
-
-// void displaypostorder(Node *ro)
-// {
-// 	if(ro==NULL)
-// 	{
-// 	return;
-// 	}
-// 	else
-// 	{
-
-// 	displaypostorder(ro->left);
-// 	displaypostorder(ro->right);
-// 	cout<<"name :"<<ro->name<<"\n";
-// 	cout<<"age  :"<<ro->age<<endl;
-// 	}
-
-// 	}
-
-// void totalNodeDisplay(Node *ro,int)
-///{//
-// if(ro==NULL)
-//	{
-// return ;
-//}
-// else
-//{
-
-// totalNodeDisplay(ro->left,count);
-// totalNodeDisplay(ro->right,count);
-// count=count+=1;
-
-// cout<<ro->data<<"\t";
-
-//}
-// cout<<count;
-//
-//}
-
-void leafDisplay(Node *ro)
-{
-    if (ro == NULL)
-    {
-        return;
-    }
-    else
-    {
-
-        leafDisplay(ro->left);
-        leafDisplay(ro->right);
-        if (ro->left == NULL && ro->right == NULL)
-        {
-            cout << "name :" << ro->name << "\n";
-            cout << "age  :" << ro->age << endl;
-        }
-    }
-}
 int displayTotalNode(Node *ro)
 {
     if (ro == NULL)
@@ -169,135 +86,70 @@ int displayTotalNode(Node *ro)
     return 1 + displayTotalNode(ro->left) + displayTotalNode(ro->right);
 }
 
-// void preorderwithoutrecursion(Node *root)
-// {
-//     Node *current;
-//     stack<Node *> s;
-//     s.push(root);
-//     while (!s.empty())
-//     {
-//         current = s.top();
-//         s.pop();
-//         cout << "name :" << root->name << "\n";
-//         cout << "age  :" << root->age << endl;
-//         if (current->right != nullptr)
-//         {
-//             s.push(current->right);
-//         }
-
-//         if (current->left != nullptr)
-//         {
-//             s.push(current->left);
-//         }
-//     }
-// }
-// int heightOfTree(Node *root)
-// {
-//     if (root == nullptr)
-//     {
-//         return -1;
-//     }
-//     int left = heightOfTree(root->left);
-//     int right = heightOfTree(root->right);
-//     return max(left, right) + 1;
-// }
-
-void ancestors(Node *root)
-{
-}
-
 bool search(Node *root, string &name)
 {
-    if (root == nullptr)
-    {
+    if (!root)
         return false;
-    }
-
     if (root->name == name)
     {
-        cout << "the member is Present in Family" << endl;
+        cout << "The member is present in the family.\n";
         return true;
     }
-
-    bool left = search(root->left, name);
-    bool right = search(root->right, name);
-    return left || right;
+    return search(root->left, name) || search(root->right, name);
 }
 
 void update(Node *root, string &member)
 {
-    if (root == nullptr)
-    {
+    if (!root)
         return;
-    }
     if (root->name == member)
     {
-        cout << "enter the age to update";
-        int nage;
-        cin >> nage;
-        cout << "enter the the name to update";
-        string name;
-        cin >> name;
-        root->age = nage;
-        root->name = name;
+        cout << "Enter new age: ";
+        cin >> root->age;
+        cout << "Enter new name: ";
+        cin >> root->name;
+        cout<<"Record updated successfully.\n";
+        return;
     }
-    else
-    {
-        update(root->left, member);
-        update(root->right, member);
-    }
+    update(root->left, member);
+    update(root->right, member);
 }
 
 bool checkancestors(Node *root, string &member)
 {
-    if (root == nullptr)
-
-    {
+    if (!root)
         return false;
-    }
     if (root->name == member)
-    {
         return true;
-    }
     if (checkancestors(root->left, member) || checkancestors(root->right, member))
     {
         cout << root->name << endl;
         return true;
     }
-}
-void ancestors(Node *root, string &member)
-{
-    {
-        if (root == nullptr)
-            return;
-    }
-    if (checkancestors(root, member))
-    {
-        cout << "the member is present in the family";
-    }
-    else
-    {
-        cout << "ancestor not found" << endl;
-    }
+    return false;
 }
 
-void decendants(Node *root, string &member)
+void ancestors(Node *root, string &member)
 {
-    if (root == nullptr)
-    {
+    if (!checkancestors(root, member))
+        cout << "Ancestor not found\n";
+  
+}
+
+void descendants(Node *root, string &member)
+{
+    if (!root)
         return;
-    }
     if (root->name == member)
     {
-        cout << "decendent for " << member << "are" << endl;
+        cout << "Descendants of " << member << " are:\n";
         displaypreorder(root->left);
         displaypreorder(root->right);
         return;
     }
-    decendants(root->left, member);
-    decendants(root->right, member);
+    descendants(root->left, member);
+    descendants(root->right, member);
 }
-
 
 void siblings(Node *root, string &member)
 {
@@ -321,6 +173,7 @@ void siblings(Node *root, string &member)
     else{
         cout << "no sibling" << endl;
     }
+    return;
     }
         displaypreorder(root->left);
         displaypreorder(root->right);
@@ -330,56 +183,61 @@ void siblings(Node *root, string &member)
 
 int main()
 {
-    int ch, calc = 0;
+    int ch;
     string member;
     do
     {
-        cout << "\n\nwhat do you want to perform\n1.insert member\n2.display members\n3.Search the member\n4.update member info\n5.total members \n6.ancestor of given member\n7.descendent of given member \n8.oldest member \n9.find siblings\n10.exit\n";
+        cout << "\nOperations:\n1. Insert Member\n2. Display Members\n3. Search Member\n4. Update Member Info\n5. Total Members\n6. Ancestor of Given Member\n7. Descendants of Given Member\n8. Oldest Member\n9. Find Siblings\n10. Exit\nEnter choice: ";
         cin >> ch;
         switch (ch)
         {
         case 1:
-
             insertroot();
             break;
         case 2:
             displaypreorder(root);
             break;
         case 3:
-            cout << "Enter the name for search";
+            cout << "Enter name to search: ";
             cin >> member;
             if (!search(root, member))
-            {
-                cout << "member is not present in family" << endl;
-            }
+                cout << "Member not found in family.\n";
             break;
         case 4:
-            cout << "Enter the name for update";
+            cout << "Enter name to update: ";
             cin >> member;
             update(root, member);
             break;
         case 5:
-            cout << displayTotalNode(root);
+            cout << "Total members: " << displayTotalNode(root) << "\n";
             break;
         case 6:
+            cout << "Enter name to find ancestors: ";
+            cin >> member;
             ancestors(root, member);
             break;
         case 7:
-            decendants(root, member);
+            cout << "Enter name to find descendants: ";
+            cin >> member;
+            descendants(root, member);
             break;
         case 8:
-            cout << "the oldest member is :" << root->name << endl;
-
+            if (root)
+                cout << "Oldest member: " << root->name << "\n";
+            else
+                cout << "No members present.\n";
             break;
         case 9:
-            cout << "Enter the name for search";
+            cout << "Enter name to find siblings: ";
             cin >> member;
             siblings(root, member);
+            break;
+        case 10:
+            cout << "Exiting...\n";
+            break;
         default:
-        cout<<" enter valid choice";
-                    break;
+            cout << "Enter a valid choice.\n";
         }
     } while (ch != 10);
-
     return 0;
 }
