@@ -1,0 +1,377 @@
+#include <iostream>
+using namespace std;
+class node
+{
+public:
+    node *left;
+    node *right;
+    int data;
+    string post;
+    string name;
+    
+    node(int x)
+    {
+        data = x;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+void insert(node *&root, int x,string name,string post)
+{
+    if (root == nullptr)
+    {
+        node *newnode = new node(x);
+    
+
+        root = newnode;
+        root->name=name;
+        root->post=post;
+        return;
+    }
+    else
+    {
+        if (root->data >= x)
+        {
+            if (root->left == nullptr)
+            {
+                node *newnode = new node(x);
+                root->left = newnode;
+                root->left->name=name;  
+root->left->post=post;
+            }
+            else
+            {
+                insert(root->left, x,name,post);
+            }
+        }
+        else
+        {
+            if (root->right == nullptr)
+            {
+                node *newnode = new node(x);
+                root->right = newnode;
+                root->right->name=name;
+                root->right->post=post;
+
+            }
+            else
+            {
+                insert(root->right, x,name,post);
+            }
+        }
+    }
+}
+void display(node *root)
+{ 
+    if (root == nullptr)
+    {
+        return;
+    }
+ 
+    display(root->left);
+   cout <<"\n\nname :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
+    display(root->right);
+}
+void search(node *root, string data,int &check)
+{
+    
+
+    if (root == nullptr)
+    {
+        return;
+    }
+ if(root->name==data)
+ {
+     cout<<"name :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
+    
+     check=1;
+ }
+    search(root->left,data,check);
+   
+    search(root->right,data,check);
+
+   
+}
+
+void update(node *root, string data,int &check)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    if (root->name == data)
+    {   check=1;
+        cout << "enter the name for updation ";
+        string name;
+        cin >> name;
+
+        root->name = name;
+        cout<<"enter the post for updation ";
+        string post;
+        cin >> post;
+
+        root->post = post;
+        cout<<"enter the salary for updation ";
+        int salary;
+        cin >> salary;
+
+        root->data = salary;
+
+        return;
+    }
+    update(root->left, data,check);
+    update(root->right, data,check);
+}
+void minsalary(node *root)
+{
+    while (root != nullptr)
+        if (root->left == nullptr)
+        {
+             cout<<"name :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
+    
+            return;
+        }
+        else
+        {
+            root = root->left;
+        }
+}
+void maxsalary(node *root)
+{
+    while (root != nullptr)
+        if (root->right == nullptr)
+        {
+             cout<<"name :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
+    
+            return;
+        }
+        else
+        {
+            root = root->right;
+        }
+}
+void totalemployee(node *root, int &count)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    count++;
+    totalemployee(root->left, count);
+    totalemployee(root->right, count);
+}
+void average(node *root, int &sum)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    sum += root->data;
+    average(root->left, sum);
+    average(root->right, sum);
+}
+
+void deletenode(node *root, int data)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    if (root->data == data)
+    {cout<<"valid data";
+        node *temp = root;
+        node *carr;
+        if (root->left == nullptr && root->right == nullptr)
+        { cout<<root->data;
+            //  root = nullptr;
+            delete root;
+            //root=nullptr;
+         
+            return;
+        }
+        else if(root->right=nullptr){
+        if (root->left->left== nullptr&&root->left->right==nullptr)
+        { cout<<root->data;
+           root=root->left;
+           root->left=nullptr;
+        }
+        return;
+        }
+        else if(root->left==nullptr)
+        {
+            cout<<root->data;
+             if (root->right->left== nullptr&&root->right->right==nullptr)
+        {
+           root=root->right;
+           root->right=nullptr;
+        }
+
+return;
+        }
+        else if (root->right == nullptr)
+        {
+            temp = root->left;
+        }
+    }
+
+    deletenode(root->left, data);
+    deletenode(root->right, data);
+}
+
+void fresher(node*root)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    if(root->left==nullptr&&root->right==nullptr)
+   { cout <<"\n\nname :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
+   }
+    fresher(root->left);
+    fresher(root->right);
+
+}
+void sameSalary(node *root)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    
+  
+    if (root->left != nullptr && root->left->data == root->data)
+    {
+        cout << "\n\nName: " << root->name << "\nPost: " << root->post << "\nSalary: " << root->data;
+        cout << "\n\nName: " << root->left->name << "\nPost: " << root->left->post << "\nSalary: " << root->left->data;
+    }
+
+    if (root->right != nullptr && root->right->data == root->data)
+    {
+        cout << "\n\nName: " << root->name << "\nPost: " << root->post << "\nSalary: " << root->data;
+        cout << "\n\nName: " << root->right->name << "\nPost: " << root->right->post << "\nSalary: " << root->right->data;
+    }
+
+    // Recursive calls
+    sameSalary(root->left);
+    sameSalary(root->right);
+}
+
+int main()
+{
+    node *root = nullptr;
+    int ch;
+    do
+    {
+        cout << "\n\nwhat do you want to perform\n";
+        cout << "1.insert\n";
+        cout << "2.search\n";
+        cout << "3.update\n";
+        cout << "4.display\n";
+        cout << "5.minimum salary\n";
+        cout << "6.maximum salary\n";
+        cout << "7.avg salary\n";
+        cout << "8.total no of employees\n";
+        cout << "9.fresher employees\n";
+        cout << "10.employee with same salary\n";
+        cout<<"11.exit\n";
+        cin >> ch;
+        switch (ch)
+        {
+        case 1:
+        {cout<<"enter the employee name :";
+            string name;
+            cin >> name;
+            cout << "enter the designation :";
+            string designation;
+            cin >> designation;
+
+            cout << "enter the salary :";
+            int data;
+            cin >> data;
+            insert(root, data, name, designation);
+
+            break;
+        }
+        case 2:
+        {
+            cout << "enter the employee to search :";
+            string ename;
+            cin >> ename;
+            int check=0;
+            search(root, ename,check);
+        if(check==0)
+        {
+            cout<<"employee not found";
+        }
+            break;
+        }
+        case 3:
+        {
+            cout << "enter the name of employee for updatation process :";
+            string data;
+            cin >> data;
+            int check=0;
+            update(root, data,check);
+            if(check==0)
+            {
+                cout<<"employee not found";
+            }
+            break;
+        }
+        case 4:
+        {   if(root==nullptr)
+        {
+            cout<<"no employee present"
+;        }
+
+           else{ 
+           display(root);}
+            break;
+        }
+        case 5:
+        {
+            minsalary(root);
+            break;
+        }
+        case 6:
+        {
+            maxsalary(root);
+            break;
+        }
+        case 7:
+
+        {
+            int sum = 0;
+            int count = 0;
+            totalemployee(root, count);
+            average(root, sum);
+            int avg;
+            avg = sum / count;
+            cout << "average salary of employees is :" << avg;
+
+            break;
+        }
+        case 8:
+        {
+            int count = 0;
+            totalemployee(root, count);
+            cout << "total employees are :" << count;
+        }
+        break;
+        case 9:
+       {cout<<"the freshers are :";
+       fresher(root);
+
+        break;
+       }
+       case 10:
+       {
+        sameSalary(root);
+       }
+       break;
+        }
+
+    } while (ch != 11);
+}
+
