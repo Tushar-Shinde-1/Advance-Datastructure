@@ -1,0 +1,80 @@
+#include<iostream>
+using namespace std;
+int ** matrix=nullptr;
+void insert(int n)
+{
+
+
+cout<<"enter starting vertex";
+int r;
+cin>>r;
+cout<<"enter ending vertex";
+int e;
+cin>>e;
+if(r<0||r>=n||e<0||e>=n)
+{
+    cout<<"invalid vertex";
+    return;
+}
+
+matrix[r][e]=1;
+matrix[e][r]=1;
+
+}
+
+
+
+
+
+
+
+void display(int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<("\n");
+    }
+}
+
+
+int main()
+{
+    int ch,n;
+    cout<<"enter the no of vertex in graph :";
+    cin>>n;
+     matrix=new int*[n];
+for(int i=0;i<n;i++)
+{
+    matrix[i]=new int[n];
+}
+for(int i=0;i<n;i++)
+{
+    for(int j=0;j<n;j++)
+    {
+        matrix[i][j]=0;
+    }
+}
+
+    do{
+    cout<<"what do you want to perform\n1.insert edge\n2.display\n3.exit\n";
+    cin>>ch;
+    switch(ch)
+    {
+        case 1:
+
+
+        insert(n);
+        break;
+        case 2:
+        display(n);
+        break;
+        default:
+        cout<<"invalid choice";
+    }
+    }while(ch!=3);
+
+}
