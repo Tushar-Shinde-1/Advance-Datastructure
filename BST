@@ -172,66 +172,76 @@ void average(node *root, int &sum)
     average(root->right, sum);
 }
 
-void deletenode(node *root, int data)
+void deletenode(node* &root,string name,int salary,int &ch )
 {
-    if (root == nullptr)
+    
+    if(root==nullptr)
     {
         return;
     }
-    if (root->data == data)
-    {cout<<"valid data";
-        node *temp = root;
-        node *carr;
-        if (root->left == nullptr && root->right == nullptr)
-        { cout<<root->data;
-            //  root = nullptr;
+
+    if(root->data==salary&&root->name==name)
+    {ch=1;
+        node * temp=root;
+        if(root->left==nullptr && root->right==nullptr)
+        { 
             delete root;
-            //root=nullptr;
-         
+            root=nullptr;
             return;
+           
         }
-        else if(root->right=nullptr){
-        if (root->left->left== nullptr&&root->left->right==nullptr)
-        { cout<<root->data;
-           root=root->left;
-           root->left=nullptr;
+        else if(root->left!=nullptr&&root->right==nullptr){
+        
+        root=root->left;
+        delete temp;
         }
-        return;
-        }
-        else if(root->left==nullptr)
-        {
-            cout<<root->data;
-             if (root->right->left== nullptr&&root->right->right==nullptr)
-        {
-           root=root->right;
-           root->right=nullptr;
-        }
+        else if(root->right!=nullptr&&root->left==nullptr){
+        
+root=root->right;
+delete temp;
 
-return;
         }
-        else if (root->right == nullptr)
-        {
-            temp = root->left;
+        else {
+            node * pre=root;
+             node* newvar=root->right;
+         
+         while(newvar->left!=nullptr)
+         { pre=newvar;
+            newvar=newvar->left;
+
+         }
+         root->data=newvar->data;
+         if(pre==root&&newvar->right==nullptr)
+         {
+         pre->right=nullptr;
+         
+         }
+         else if(pre==root)
+         {
+            root->right=newvar->right;
+        
+         }
+         else{
+            pre->left=nullptr;
+         }
+         delete(newvar);
+         return; 
         }
+       
     }
-
-    deletenode(root->left, data);
-    deletenode(root->right, data);
-}
-
-void fresher(node*root)
-{
-    if (root == nullptr)
+    if(root->data>salary)
     {
-        return;
+        deletenode(root->left,name,salary,ch);
     }
-    if(root->left==nullptr&&root->right==nullptr)
-   { cout <<"\n\nname :"<<root->name<<"\n"<<"post :"<<root->post<<"\n"<<"salary :"<< root->data << " ";
-   }
-    fresher(root->left);
-    fresher(root->right);
 
+    else if(root->data<salary)
+    {
+       deletenode(root->right,name,salary,ch); 
+    }
 }
+
+
+
 void sameSalary(node *root)
 {
     if (root == nullptr)
@@ -272,7 +282,7 @@ int main()
         cout << "6.maximum salary\n";
         cout << "7.avg salary\n";
         cout << "8.total no of employees\n";
-        cout << "9.fresher employees\n";
+        cout << "9.delete\n";
         cout << "10.employee with same salary\n";
         cout<<"11.exit\n";
         cin >> ch;
@@ -360,8 +370,23 @@ int main()
         }
         break;
         case 9:
-       {cout<<"the freshers are :";
-       fresher(root);
+
+       {int check=0;
+        cout<<"Enter the name and salary to delete employee :\n";
+       cout<<"name :";
+       string name;
+       int salary;
+       cin>>name;
+       cout<<"salary :";
+       cin>>salary;
+       deletenode(root,name,salary,check);
+
+       if(check==0)
+       {
+        cout<<"Employee not found\n";
+       }
+
+    
 
         break;
        }
@@ -374,4 +399,3 @@ int main()
 
     } while (ch != 11);
 }
-
