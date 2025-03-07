@@ -1,0 +1,119 @@
+#include<iostream>
+#include<cstring> 
+using namespace std;
+
+int **matrix = nullptr;
+
+void insert(int n, char *words[]) {
+    int roe, col;
+    for (int i = 0; i < n; i++) {
+        cout << "Enter the name of city " << i + 1 << ": ";
+        words[i] = new char[20];
+        cin >> words[i];
+    }
+
+    cout << "\n\nFill info about flight time between cities:\n";
+    int ch;
+    do {
+        cout << "Enter starting city: ";
+        string scity;
+        cin >> scity;
+        bool cityFound = false;
+        for (int i = 0; i < n; i++) {
+            if (strcmp(words[i], scity.c_str()) == 0) {
+                roe = i;
+                cityFound = true;
+                break;
+            }
+        }
+
+        if (!cityFound) {
+            cout << "Invalid city\n";
+            continue;
+        }
+
+        cout << "Enter ending city: ";
+        string ecity;
+        cin >> ecity;
+        cityFound = false;
+        for (int j = 0; j < n; j++) {
+            if (strcmp(words[j], ecity.c_str()) == 0) {
+                col = j;
+                cityFound = true;
+                break;
+            }
+        }
+
+        if (!cityFound) {
+            cout << "Invalid city\n";
+            continue;
+        }
+        cout<<"enter the flight time(in min): ";
+        int flightTime;
+        cin>>flightTime;
+
+        matrix[roe][col] = flightTime;
+        matrix[col][roe] = flightTime; 
+
+        cout << "Do you want to insert more flight times between cities? (1 for Yes, 0 for No): ";
+        cin >> ch;
+    } while (ch == 1);
+}
+
+void display(int n, char *words[]) {
+    cout<<"cities";
+    for (int i = 0; i < n; i++) {
+        cout << " " << words[i] << "  ";
+    }
+    cout << endl;
+
+    
+    for (int i = 0; i < n; i++) {
+        cout << words[i] << "     ";
+        for (int j = 0; j < n; j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << "\n";
+    }
+}
+
+int main() {
+    int ch, n;
+    cout << "Enter the total number of cities: ";
+    cin >> n;
+
+    char* words[n];
+    matrix = new int*[n];
+    for (int i = 0; i < n; i++) {
+        matrix[i] = new int[n];
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matrix[i][j] = 0;
+        }
+    }
+
+    do {
+        cout << "What do you want to perform?\n1. Insert cities and time between cities\n2. Display\n3. Exit\n";
+        cin >> ch;
+
+        switch (ch) {
+            case 1:
+                insert(n, words);
+                break;
+            case 2:
+                display(n, words);
+                break;
+            case 3:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice.\n";
+        }
+    } while (ch != 3);
+
+   
+
+    return 0;
+}
