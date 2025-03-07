@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+
+class node {
+public:
+    int data;        
+    string name;     
+    string cname;    
+    node* next;      
+
+    node(int value, string name1, string cname1) {
+        name = name1;
+        cname = cname1;
+        data = value;
+        next = nullptr;
+    }
+} *head = nullptr, *temp;
+
+int main() {
+    int nn;  
+    cout << "Enter the total number of cities: ";
+    cin >> nn;
+
+    node* arry[nn];  
+
+   
+    for (int i = 0; i < nn; i++) {
+        cout << "\n\nEnter the name of city " << i + 1 << ": ";
+        string name;
+        cin >> name;
+
+        cout << "Enter the name of the airport for " << name << " city: ";
+        string cname;
+        cin >> cname;
+
+        int value = 0;  
+
+    
+        if (head == nullptr) {
+            head = new node(value, name, cname);
+            arry[i] = head;
+            temp = head;
+        }
+
+        cout << "Enter the number of cities connected to airport " << cname << ": ";
+        int m;  
+        cin >> m;
+
+        for (int j = 0; j < m; j++) {
+            cout << "\nEnter the name of city " << j + 1 << " adjecent to " << name << ": ";
+            string connected_city;
+            cin >> connected_city;
+
+            cout << "Enter the flight time (in min) between city " << name << " and " << connected_city << ": ";
+            int flight_time;
+            cin >> flight_time;
+
+            temp->next = new node(flight_time, connected_city, "");
+            temp = temp->next;
+        }
+
+        head=nullptr;
+    }
+
+
+
+for(int i=0;i<nn;i++)
+{
+    cout<<arry[i]->name<<endl; 
+
+}
+     
+    
+    for (int i = 0; i < nn; i++) {
+        cout << "City: " << arry[i]->name << " (" << arry[i]->cname << ") has connections to: ";
+        temp = arry[i]->next;
+
+        if (temp == nullptr) {
+            cout << "No connections" << endl;
+        } else {
+            while (temp != nullptr) {
+                cout << temp->name << " (Flight time: " << temp->data << " min) , ";
+                temp = temp->next;
+            }
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
