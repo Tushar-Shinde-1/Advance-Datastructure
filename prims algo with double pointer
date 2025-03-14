@@ -1,0 +1,113 @@
+#include<iostream>
+using namespace std;
+
+int ** a=nullptr;
+int **matrix;
+int main()
+{
+    cout<<"enter the no of vertex :";
+    int V;
+    cin>>V;
+    cout<<"Enter the no of edges :";
+    int e;
+    cin>>e;
+    a=new int*[V];
+    matrix=new int*[V];
+
+    for(int i=0;i<V;i++)
+    {
+       a[i]=new int[V](); 
+       matrix[i]=new int[V]();
+    }   
+    int s,d;
+    
+    cout<<"insert the edges\n";
+    for(int i=0;i<e;i++)
+    {
+        do{
+        cout<<"enter the source and destination:";
+     
+        cin>>s>>d;
+        if(s<0||d<0)
+        {
+            cout<<"enter the valid vertex\n";
+        }
+        else if(s>=V||d>=V)
+        {
+            cout<<"enter the valid vertex\n";
+        }
+        }
+        while(s>=V||d>=V);
+        cout<<"enter the weight";
+        int w;
+        cin>>w;
+        a[s][d]=w;
+        a[d][s]=w;
+
+
+    }
+
+
+
+    //display
+    for(int i=0;i<V;i++)
+    {
+        
+        for(int j=0;j<V;j++)
+        {
+            cout<<a[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<"enter the source vertex";
+int source;
+cin>>source;
+
+//prim algorithm
+int min;
+int u;
+int v;
+int visited[V];
+for(int i=0;i<V;i++)
+{
+    visited[i]=0;
+}
+
+
+
+visited[source]=1;
+for(int i=0;i<V-1;i++)
+{
+    min=999;
+    for(int j=0;j<V;j++)
+    {
+        if(visited[j]!=0)
+        {
+            for(int k=0;k<V;k++){
+                if(visited[k]!=1&&a[j][k]!=0)
+                {
+                    if(min>a[j][k])
+                    {
+                        min=a[j][k];
+                        u=j;
+                        v=k;
+                    }
+
+}
+                }
+            }
+        }
+
+        matrix[u][v]=min;
+        matrix[v][u]=min;
+        visited[v]=1;
+
+cout<<" edge "<<u<<"--->"<<v<<" weight"<<min<<endl;
+    }
+
+}
+
+
+
+
+
