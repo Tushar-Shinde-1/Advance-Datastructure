@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+    int a[5][5]={{0,2,0,6,0},
+                    {2,0,3,8,5},
+                    {0,3,0,0,7},
+                    {6,8,0,0,9},
+                    {0,5,7,9,0}};
+    int visited[5]={0,0,0,0,0};
+    int min=999;
+    int u;
+    int v;
+    visited[0]=1;
+    for(int i=0;i<4;i++)
+    {
+        min=999;
+        for(int  j=0;j<5;j++)
+        {
+            if(visited[j]==1)
+            {
+                for(int k=0;k<5;k++)
+                {
+                    if(visited[k]!=1&&a[j][k]!=0)
+
+                    {
+                        if(min>a[j][k])
+    {
+        min=a[j][k];
+    v=k;
+    u=j;
+    }                    }
+                }
+            }
+        }
+        visited[v]=1;
+        cout<<"edge: "<<u<<"-"<<v<<" weight: "<<min<<endl;
+
+
+    }
+
+}
