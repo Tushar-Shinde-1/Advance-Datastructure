@@ -1,161 +1,165 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-int ** a=nullptr;
+int **a = nullptr;
 int **matrix;
 int main()
 {
-    cout<<"enter the no of cities :";
+    cout << "enter the no of cities :";
     int V;
-    cin>>V;
-    cout<<"Enter the no of connections between cities :";
+    cin >> V;
+    cout << "Enter the no of connections between cities :";
     int e;
-    cin>>e;
-    a=new int*[V];
-    matrix=new int*[V];
- string cities[V];
-cout<<"enter the name of cities "<<endl;
-for(int i=0;i<V;i++)
-{cout<<"enter the first city"<<i+1;
-cin>>cities[i];
-}
-
-    for(int i=0;i<V;i++)
+    cin >> e;
+    a = new int *[V];
+    matrix = new int *[V];
+    string cities[V];
+    cout << "enter the name of cities " << endl;
+    for (int i = 0; i < V; i++)
     {
-       a[i]=new int[V](); 
-       matrix[i]=new int[V]();
-    }   
-     string s;
-     string d;
-    int j,k,flag=0;
-    int flag1=0;
-    
-    cout<<"insert the starting and ending cities and their distance\n";
-    for(int i=0;i<e;i++)
-    {
-        do{
-        cout<<"enter the starting and ending cities:";
-     
-        cin>>s>>d;
-        for( k=0;k<V;k++)
-        {if(s==cities[i])
-        {
-        flag=1;
-        }
-        }
-         for( j=0;j<V;j++)
-        {if(d==cities[j])
-        {
-        flag1=1;
-        }
-        }
-        
-        if(flag==0||flag1==0)
-        {
-            cout<<"enter the valid city\n";
-        }
-       
-        }
-        while(flag1!=1&&flag!=1);
-        cout<<"enter the distance";
-        int w;
-        cin>>w;
-        a[k][j]=w;
-        a[j][k]=w;
-
-
+        cout << "enter the name of city" << i + 1;
+        cin >> cities[i];
     }
 
-
-
-    //display
-    for(int i=0;i<V;i++)
+    for (int i = 0; i < V; i++)
     {
-        
-        for(int j=0;j<V;j++)
-        {if(a[i][j]!=0)
-        { cout<<cities[i]<<"to"<<cities[j]<<" distance";
-            cout<<a[i][j]<<" ";
-        }
-        }
-        cout<<endl;
+        a[i] = new int[V]();
+        matrix[i] = new int[V]();
     }
-    cout<<"enter the source vertex";
-int source;
-cin>>source;
+    string s;
+    string d;
+    int j, index1,index2,k, flag = 0;
+    int flag1 = 0;
 
-//prim algorithm
-int min;
-int weight=0;
-int u;
-int v;
-int visited[V];
-for(int i=0;i<V;i++)
-{
-    visited[i]=0;
-}
-
-
-
-visited[source]=1;
-for(int i=0;i<V-1;i++)
-{
-    min=999;
-    for(int j=0;j<V;j++)
-    {
-        if(visited[j]!=0)
+    cout << "insert the starting and ending cities and their distance\n";
+    for (int i = 0; i < e; i++)
+    {cout<<"hi";
+        do
         {
-            for(int k=0;k<V;k++){
-                if(visited[k]!=1&&a[j][k]!=0)
+            index1=-1;
+            index2=-1;
+            flag = 0;
+            flag1 = 0;
+            cout << "enter the starting and ending cities:";
+
+            cin >> s >> d;
+            for (k = 0; k < V; k++)
+            {
+                if (s == cities[k])
                 {
-                    if(min>a[j][k])
-                    {
-                        min=a[j][k];
-                        u=j;
-                        v=k;
-                    }
+                    flag = 1;
+                    index1=k;
+                }
+            }
+            for (j = 0; j < V; j++)
+            {
+                if (d == cities[j])
+                {
+                    flag1 = 1;
+                    index2 = j;
+                }
+            }
 
-}
+            if (flag == 0 || flag1 == 0)
+            {
+                cout << "enter the valid city\n";
+            }
+
+        } while (flag1 != 1 || flag != 1);
+        cout << "enter the distance";
+        int w;
+        cin >> w;
+        a[index1][index2] = w;
+        a[index2][index1] = w;
+    }
+
+    // display
+    // for (int i = 0; i < V; i++)
+    // {
+
+    //     for (int j = 0; j < V; j++)
+    //     {
+    //         if (a[i][j] != 0)
+    //         {
+    //             cout << cities[i] << " to " << cities[j] << " distance";
+    //             cout << a[i][j] << " ";
+    //         }
+    //     }
+    //     cout << endl;
+    // }
+    cout << "enter the stating city ";
+    int source;
+    cin >> source;
+
+    // prim algorithm
+    int min;
+    int weight = 0;
+    int u;
+    int v;
+    int visited[V];
+    for (int i = 0; i < V; i++)
+    {
+        visited[i] = 0;
+    }
+
+    visited[source] = 1;
+    for (int i = 0; i < V - 1; i++)
+    {
+        min = 999;
+        for (int j = 0; j < V; j++)
+        {
+            if (visited[j] != 0)
+            {
+                for (int k = 0; k < V; k++)
+                {
+                    if (visited[k] != 1 && a[j][k] != 0)
+                    {
+                        if (min > a[j][k])
+                        {
+                            min = a[j][k];
+                            u = j;
+                            v = k;
+                        }
+                    }
                 }
             }
         }
 
-        matrix[u][v]=min;
-        matrix[v][u]=min;
-        visited[v]=1;
-        weight+=min;
+        matrix[u][v] = min;
+        matrix[v][u] = min;
+        visited[v] = 1;
+        weight += min;
 
-cout<<" edge "<<u<<"--->"<<v<<" weight"<<min<<endl;
+        cout << " city  " <<cities[ u] << "--->" << cities[v] << " distance" << min << endl;
     }
-    cout<<"weight of MST is "<<weight<<endl;
-    //display the prims matrix
-    
-    
-    for(int i=0;i<V;i++)
+    //cout << "weight of MST is " << weight << endl;
+    // display the prims matrix
+
+    // for (int i = 0; i < V; i++)
+    // {
+    //     for (int j = 0; j < V; j++)
+    //     {
+    //         cout << matrix[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // getting the minnimum weighted edge;
+    int minedge = 9999;
+    ;
+    int start;
+    int end;
+    for (int i = 0; i < V; i++)
     {
-    for (int j=0;j<V;j++)
-    {
-    cout<<matrix[i][j]<<" ";
+        for (int j = 0; j < V; j++)
+        {
+            if (minedge > matrix[i][j] && matrix[i][j] != 0)
+            {
+                minedge = matrix[i][j];
+                start = i;
+                end = j;
+            }
+        }
     }
-cout<<endl;
 
-}
-//getting the minnimum weighted edge;
-int minedge=9999;;
-for(int i=0;i<V;i++)
-{
-for(int j=0;j<V;j++)
-{
-if(minedge>matrix[i][j]&&matrix[i][j]!=0)
-{
-minedge=matrix[i][j];
-}
-}
-}
-
-
-
-cout<<"the minnimum weighted edge present in the MST is "<<minedge<<endl;
-
-
+    cout << "the cities  "<<cities[start]<<" and " <<cities[end]<<"  is with minnimum distance "<< minedge << endl;
 }
