@@ -1,0 +1,227 @@
+#include <iostream>
+#include <cstring>
+#include <climits>
+using namespace std;
+
+int **matrix = nullptr;
+
+void insert(int n, char *words[]) {
+    int roe, col;
+    for (int i = 0; i < n; i++) {
+        cout << "Enter the name of city " << i + 1 << ": ";
+        words[i] = new char[20];
+        cin >> words[i];
+    }
+
+    cout << "\n\nFill info about time between cities:\n";
+    int ch;
+    do {
+        cout << "Enter starting city: ";
+        string scity;
+        cin >> scity;
+        bool cityFound = false;
+        for (int i = 0; i < n; i++) {
+            if (strcmp(words[i], scity.c_str()) == 0) {
+                roe = i;
+                cityFound = true;
+                break;
+            }
+        }
+
+        if (!cityFound) {
+            cout << "Invalid city\n";
+            continue;
+        }
+
+        cout << "Enter ending city: ";
+        string ecity;
+        cin >> ecity;
+        cityFound = false;
+        for (int j = 0; j < n; j++) {
+            if (strcmp(words[j], ecity.c_str()) == 0) {
+                col = j;
+                cityFound = true;
+                break;
+            }
+        }
+
+        if (!cityFound) {
+            cout << "Invalid city\n";
+            continue;
+        }
+
+        cout << "Enter the flight time (in minutes): ";
+        int flightTime;
+        cin >> flightTime;
+
+        matrix[roe][col] = flightTime;
+        matrix[col][roe] = flightTime; // Assuming undirected (bi-directional) graph
+
+        cout << "Do you want to insert more flight times? (1 for Yes, 0 for No): ";
+        cin >> ch;
+    } while (ch == 1);
+}
+
+void display(int n, char *words[]) {
+    cout << "\nFlight Time Matrix:\n\n";
+    cout << "         ";
+    for (int i = 0; i < n; i++) {
+        cout << words[i] << "  ";
+    }
+    cout << endl;
+
+    for (int i = 0; i < n; i++) {
+        cout << words[i] << "     ";
+        for (int j = 0; j < n; j++) {
+            cout << matrix[i][j] << "        ";
+        }
+        cout << "\n";
+    }
+}
+
+void check(int n,int src,char *words)
+{
+int dist[n];
+bool visited[n];
+for(int i=0;i<n;i++)
+{
+    dist[i]=INT_MAX;
+    visited[i]=false;
+}
+
+
+dist[src]=0;
+for(int i=0;i<n;i++)
+{
+    int u=-1; int min=INT_MAX;
+    for(int i=0;i<n;i++)
+    {
+        if(!visited&&dist[i]<min)
+        {   min=dist[i];
+            u=i;
+        }
+    if (u==-1)break;
+
+        visited[u]=true;
+        for(int j=0;j<n;j++)
+        {
+            if(!visited[j]&&matrix[u][j]!=0&&matrix[u][j]+dist[u]<dist[j])
+            {
+                dist[j]=matrix[u][j]+dist[u];
+            }
+            
+        }
+    }
+}
+}
+
+void dijkstra(int n, int src, char *words[]) {
+    int dist[n];
+    bool visited[n];
+
+    for (int i = 0; i < n; i++) {
+        dist[i] = INT_MAX;
+        visited[i] = false;
+    }
+
+    dist[src] = 0;
+
+    for (int count = 0; count < n - 1; count++) {
+        int u = -1, minDist = INT_MAX;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i] && dist[i] < minDist) {
+                minDist = dist[i];
+                u = i;
+            }
+        }
+
+        if (u == -1) break;
+
+        visited[u] = true;
+
+        for (int v = 0; v < n; v++) {
+            if (matrix[u][v] != 0 && !visited[v] && dist[u] + matrix[u][v] < dist[v]) {
+                dist[v] = dist[u] + matrix[u][v];
+            }
+        }
+    }
+
+    cout << "\nShortest time from " << words[src] << " to other cities:\n";
+    for (int i = 0; i < n; i++) {
+        if (dist[i] == INT_MAX)
+            cout << words[src] << " -> " << words[i] << " = No path\n";
+        else
+            cout << words[src] << " -> " << words[i] << " = " << dist[i] << " mins\n";
+    }
+}
+
+int main() {
+    int ch, n;
+    cout << "Enter the total number of cities: ";
+    cin >> n;
+
+    char* words[n];
+    matrix = new int*[n];
+    for (int i = 0; i < n; i++) {
+        matrix[i] = new int[n];
+    }
+
+    // Initialize matrix with 0
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            matrix[i][j] = 0;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insert cities and flight times\n";
+        cout << "2. Display matrix\n";
+        cout << "3. Find shortest time using Dijkstra\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> ch;
+
+        switch (ch) {
+            case 1:
+                insert(n, words);
+                break;
+            case 2:
+                display(n, words);
+                break;
+            case 3: {
+                string srcName;
+                int srcIndex = -1;
+                cout << "Enter source city name: ";
+                cin >> srcName;
+
+                for (int i = 0; i < n; i++) {
+                    if (strcmp(words[i], srcName.c_str()) == 0) {
+                        srcIndex = i;
+                        break;
+                    }
+                }
+
+                if (srcIndex == -1) {
+                    cout << "City not found!\n";
+                } else {
+                    dijkstra(n, srcIndex, words);
+                }
+                break;
+            }
+            case 4:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice.\n";
+        }
+    } while (ch != 4);
+
+    // Cleanup
+    for (int i = 0; i < n; i++) {
+        delete[] matrix[i];
+        delete[] words[i];
+    }
+    delete[] matrix;
+
+    return 0;
+}
