@@ -14,9 +14,52 @@ class music{
     }
     
 }a;
-
-void insert(music m[],string name,string type,string id,int arry[],int n)
+void rehash(music*& m, int& n, int*& arr)
 {
+    int old = n;
+    n = n * 2;
+
+    music* m1 = new music[n];
+    int* arr1 = new int[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        arr1[i] = -1; 
+    }
+
+    for (int i = 0; i < old; i++)
+    {
+        if (arr[i] == 0)
+        {
+            int val = 0;
+            for (char c : m[i].id)
+            {
+                val += c;
+            }
+            val = val % n;
+
+            while (arr1[val] == 0)
+            {
+                val = (val + 1) % n;
+            }
+
+            cout<<"--------element "<<m[i].name<<" inserted at position "<<val<<"----------"<<endl;
+            m1[val] = m[i];
+            arr1[val] = 0;
+        }
+    }
+
+    delete[] m;
+    delete[] arr;
+
+    m = m1;
+    arr = arr1;
+}
+
+void insert(music*& m, string name, string type, string id, int*& arry, int& n, int& check)
+{
+
+    if(check/n<0.75){
 int val=0;
 for(char c:id)
 {
@@ -34,6 +77,8 @@ if(arry[val]==-1||arry[val]==-2)
     m[val].type=type;
     m[val].id=id;
     arry[val]=0;
+    check++;
+    cout<<"-------element "<<name<<" inserted at position "<<val<<"----------"<<endl;
 }
 else{
     while(i!=1)
@@ -47,15 +92,22 @@ else{
         m[val].id=id;
         arry[val]=0;
         i=1;
+        check++;
+      cout<<"-------element "<<name<<" inserted at position "<<val<<"----------"<<endl;
     }
 
     if(j==n)
     {
-        cout<<"hash table is full";
+        cout<<"hash table is full!!"<<endl;
         i=1;
     }
     }
 
+}}
+else{
+    cout<<"\n-----------||REHASHING||-----------"<<endl;
+    rehash(m,n,arry);
+      insert(m, name, type, id, arry, n, check);
 }
 }
 void display(music m[],int arry[],int n)
@@ -88,9 +140,9 @@ void update(music m[],string id,string name,int n,int arry[])
     if(m[val].id==id&&m[val].name==name)
     {
         string name1,type1;
-        cout<<"enter the name";
+        cout<<"enter the name  :";
         cin>>name1;
-        cout<<"enter the type";
+        cout<<"enter the type   :";
         cin>>type1;
         m[val].name=name1;
         m[val].type=type1;
@@ -106,9 +158,9 @@ void update(music m[],string id,string name,int n,int arry[])
     if(m[val].id==id)
     {
         string name1,type1;
-        cout<<"enter the name";
+        cout<<"enter the name :";
         cin>>name1;
-        cout<<"enter the type";
+        cout<<"enter the type :";
         cin>>type1;
         m[val].name=name1;
         m[val].type=type1;
@@ -221,13 +273,17 @@ else{
 }
 }
 }
+
+
+
 int main()
-{  
+{  int check=0;
     int ch,n;
     cout<<"enter the number of music track";
     cin>>n;
-    music m[n];
-    int arry[n];
+    //music m[n];
+    music *m = new music[n];
+    int *arry=new int[n];
     for(int i=0;i<n;i++)
     {
         arry[i]=-1;
@@ -246,18 +302,18 @@ switch(ch)
 {
     case 1:
     //insert
-    cout<<"enter the name of music track";
+    cout<<"enter the name of music track :";
     cin>>name;
-    cout<<"enter the type of music track";
+    cout<<"enter the type of music track :";
     cin>>type;
-    cout<<"enter the id of music track";
+    cout<<"enter the id of music track  :";
     cin>>id;
 
-    insert(m,name,type,id,arry,n);
+    insert(m,name,type,id,arry,n,check);
     break;
     case 2:
     //delete
-    cout<<"enter the id of music track";
+    cout<<"enter the id of music track :";
     cin>>id;
     delete1(m,id,n,arry);
     break;
@@ -267,9 +323,9 @@ switch(ch)
     break;
     case 4:
     //update
-    cout<<"enter the name of music track";
+    cout<<"enter the name of music track :";
     cin>>name;
-    cout<<"enter the id of music track";
+    cout<<"enter the id of music track :";
     cin>>id;
 
     update(m,id,name,n,arry);
@@ -277,7 +333,7 @@ switch(ch)
     case 5:
 
     //search
-    cout<<"enter the id of music track";
+    cout<<"enter the id of music track :";
     cin>>id;
     search(m,id,n,arry);
 
