@@ -1,0 +1,174 @@
+#include <iostream>
+using namespace std;
+
+const int SIZE = 10;
+const int PRIME = 7; // Must be smaller than SIZE
+
+class Patient {
+public:
+    string name;
+    string id;
+    int age;
+
+    Patient() {
+        name = "empty";
+        id = "empty";
+        age = -1;
+    }
+};
+
+int hash1(string id) {
+    int sum = 0;
+    for (char c : id) sum += c;
+    return sum % SIZE;
+}
+
+int hash2(string id) {
+    int sum = 0;
+    for (char c : id) sum += c;
+    return PRIME - (sum % PRIME);
+}
+
+void insert(Patient table[], int status[], string name, int age, string id) {
+    int h1 = hash1(id);
+    int h2 = hash2(id);
+
+    int i = 0;
+    while (i < SIZE) {
+        int idx = (h1 + i * h2) % SIZE;
+        if (status[idx] == -1 || status[idx] == -2) {
+            table[idx].name = name;
+            table[idx].id = id;
+            table[idx].age = age;
+            status[idx] = 0;
+            cout << "Record inserted at index " << idx << endl;
+            return;
+        }
+        i++;
+    }
+    cout << "Hash table is full\n";
+}
+
+void display(Patient table[], int status[]) {
+    for (int i = 0; i < SIZE; i++) {
+        if (status[i] == 0) {
+            cout << "Index " << i << ": "
+                 << "Name: " << table[i].name
+                 << ", Age: " << table[i].age
+                 << ", ID: " << table[i].id << endl;
+        }
+    }
+}
+
+void search(Patient table[], int status[], string id) {
+    int h1 = hash1(id);
+    int h2 = hash2(id);
+
+    int i = 0;
+    while (i < SIZE) {
+        int idx = (h1 + i * h2) % SIZE;
+        if (status[idx] == -1) break;
+        if (table[idx].id == id && status[idx] == 0) {
+            cout << "Record found at index " << idx << ":\n";
+            cout << "Name: " << table[idx].name
+                 << ", Age: " << table[idx].age
+                 << ", ID: " << table[idx].id << endl;
+            return;
+        }
+        i++;
+    }
+    cout << "Record not found\n";
+}
+
+void update(Patient table[], int status[], string id) {
+    int h1 = hash1(id);
+    int h2 = hash2(id);
+
+    int i = 0;
+    while (i < SIZE) {
+        int idx = (h1 + i * h2) % SIZE;
+        if (status[idx] == -1) break;
+        if (table[idx].id == id && status[idx] == 0) {
+            cout << "Enter new name: ";
+            cin >> table[idx].name;
+            cout << "Enter new age: ";
+            cin >> table[idx].age;
+            cout << "Record updated\n";
+            return;
+        }
+        i++;
+    }
+    cout << "Record not found\n";
+}
+
+void deleteRecord(Patient table[], int status[], string id) {
+    int h1 = hash1(id);
+    int h2 = hash2(id);
+
+    int i = 0;
+    while (i < SIZE) {
+        int idx = (h1 + i * h2) % SIZE;
+        if (status[idx] == -1) break;
+        if (table[idx].id == id && status[idx] == 0) {
+            status[idx] = -2;
+            cout << "Record deleted at index " << idx << endl;
+            return;
+        }
+        i++;
+    }
+    cout << "Record not found\n";
+}
+
+int main() {
+    Patient table[SIZE];
+    int status[SIZE];
+
+    for (int i = 0; i < SIZE; i++) status[i] = -1;
+
+    int choice;
+    string name, id;
+    int age;
+
+    do {
+        cout << "\n1. Insert\n2. Delete\n3. Display\n4. Update\n5. Search\n0. Exit\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter patient name: ";
+            cin >> name;
+            cout << "Enter patient age: ";
+            cin >> age;
+            cout << "Enter patient ID: ";
+            cin >> id;
+            insert(table, status, name, age, id);
+            break;
+        case 2:
+            cout << "Enter patient ID to delete: ";
+            cin >> id;
+            deleteRecord(table, status, id);
+            break;
+        case 3:
+            display(table, status);
+            break;
+        case 4:
+            cout << "Enter patient ID to update: ";
+            cin >> id;
+            update(table, status, id);
+            break;
+        case 5:
+            cout << "Enter patient ID to search: ";
+            cin >> id;
+            search(table, status, id);
+            break;
+        case 0:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice\n";
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
