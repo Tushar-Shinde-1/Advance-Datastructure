@@ -1,0 +1,110 @@
+#include<iostream>
+using namespace std;
+
+float mtx[10][10];
+float costm[10][10];
+
+void weigh(int i,int j,float unsucc[],float succ[])
+
+{
+    float w=0;
+    for(int k=i;k<=j;k++)
+    {   
+       w+=unsucc[k] ;
+    }
+    for(int k=i+1;k<=j;k++)
+    {   
+       w+=succ[k] ;
+    }
+    cout<<"w("<<i<<","<<j<<")="<<w<<endl;
+mtx[i][j]=w;
+
+}
+void display(int n)
+{
+    for(int i=0;i<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+        { 
+            cout<<"weight "<<i<<","<<j<<":"<<mtx[i][j]<<"            "; 
+            cout<<"cost   "<<i<<","<<j<<":"<<costm[i][j]<<"          ";
+        }
+        cout<<endl;
+    }
+}
+void cost(int i,int j,float unsucc[],float succ[])
+{
+    if(i==j)
+    {
+        costm[i][j]=0;
+    }
+    else{
+        float min=1e9;
+        for(int k=i+1;k<=j;k++)
+    {
+        float c=costm[i][k-1]+costm[k][j];
+        if(c<min)
+        {
+            min=c;
+        }
+    }
+
+    costm[i][j]=min+mtx[i][j];
+    }
+    cout<<"cost("<<i<<","<<j<<")="<<costm[i][j]<<endl;
+}
+
+
+int main() {
+    int n;
+    cout<<"enter total no of keys";
+    cin>>n;
+    float arr[n];
+    cout<<"enter keys";
+    for(int i=0;i<n;i++){
+    cin>>arr[i];    
+    
+    }
+float succ[n];
+    cout<<"enter the successful probabilities";
+    for(int i=1;i<=n;i++){
+    cin>>succ[i];
+
+    }
+    float unsuccess[n+1];
+    cout<<"enter the unsuccessful probabilities";
+    for(int i=0;i<n+1;i++){
+        cout<<"enter unsuccessful probability for "<<i;
+        cin>>unsuccess[i];
+    }
+
+for(int i=0;i<=n;i++)
+{
+    for(int j=0;j<=n;j++)
+    {
+        if(j-i<=n)
+        {
+           weigh(i,j,unsuccess,succ) ;
+          // cost(i,j,unsuccess,succ);
+        }
+    
+
+
+    
+    }
+}
+
+
+
+
+for(int i=0;i<n;i++)
+{
+    for(int j=0;j<n-i;j++)
+    {
+        cost(j,j+i+1,unsuccess,succ);
+    }
+}
+
+display(n);
+
+}
