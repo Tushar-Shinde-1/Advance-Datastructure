@@ -2,7 +2,20 @@
 using namespace std;
 
 float mtx[10][10];
-float costm[10][10];
+float costm[10][10];\
+int r[10][10];
+
+class obst{
+    public:
+    int data;
+    obst *right;
+    obst *left;
+    obst()
+    {
+        right=nullptr;
+        left=nullptr;
+    }
+}* root=nullptr;
 
 void weigh(int i,int j,float unsucc[],float succ[])
 
@@ -26,14 +39,15 @@ void display(int n)
     {
         for(int j=0;j<=n;j++)
         { 
-            cout<<"weight "<<i<<","<<j<<":"<<mtx[i][j]<<"            "; 
-            cout<<"cost   "<<i<<","<<j<<":"<<costm[i][j]<<"          ";
+            cout<<"weight ("<<i<<","<<j<<"):"<<mtx[i][j]<<"     "; 
+            cout<<"cost("<<i<<","<<j<<"):"<<costm[i][j]<<"    ";
+            cout<<"a("<<i<<","<<j<<"):"<<r[i][j]<<endl;
         }
         cout<<endl;
     }
 }
 void cost(int i,int j,float unsucc[],float succ[])
-{
+{   int a=0;
     if(i==j)
     {
         costm[i][j]=0;
@@ -44,17 +58,31 @@ void cost(int i,int j,float unsucc[],float succ[])
     {
         float c=costm[i][k-1]+costm[k][j];
         if(c<min)
-        {
+        {   
             min=c;
+            a=k;
         }
     }
 
     costm[i][j]=min+mtx[i][j];
+    r[i][j]=a;
     }
     cout<<"cost("<<i<<","<<j<<")="<<costm[i][j]<<endl;
 }
+obst *construct(int i,int j,float arr[])
+{
+    if(i==j)
+    {
+        return nullptr;
+    }
+    int index=r[i][j];
+    obst* newnode=new obst();
+    newnode->data=arr[index-1];
 
-
+    newnode->left=construct(i,index-1,arr);
+    newnode->right=construct(index+1,j,arr);
+    return newnode;
+}
 int main() {
     int n;
     cout<<"enter total no of keys";
@@ -106,5 +134,6 @@ for(int i=0;i<n;i++)
 }
 
 display(n);
+root=construct(0,n,arr);
 
 }
